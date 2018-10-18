@@ -1,0 +1,4 @@
+{
+  "ft-tree.py::test": true, 
+  "matchTemplate.py::testMatchTemplate": true
+}
