@@ -1,0 +1,29 @@
+strict digraph "" {
+	freelistBelowHiPriorityThreshold -> Suppressed;
+	times -> freelistBelowHiPriorityThreshold;
+	Suppressed -> SWITCHINGENGINEMAN;
+	SWITCHINGENGINEMAN -> LLC;
+	LLC -> IPP;
+	IPP -> interrupt;
+	IPP -> input;
+	IPPLLCINTERRUPTFREELISTBELOWHIPRIORITYTHRESHOLD	 [color=blue];
+	IPP -> IPPLLCINTERRUPTFREELISTBELOWHIPRIORITYTHRESHOLD;
+	"IPPLLCINTERRUPTFREELISTBELOWHIPRIORITYTHRESHOLD "	 [color=blue];
+	interrupt -> "IPPLLCINTERRUPTFREELISTBELOWHIPRIORITYTHRESHOLD ";
+	interrupt -> "input ";
+	Itest	 [color=blue];
+	interrupt -> Itest;
+	"Itest "	 [color=blue];
+	input -> "Itest ";
+	"IPPLLCINTERRUPTFREELISTBELOWHIPRIORITYTHRESHOLD " -> sgf;
+	"Itest  "	 [color=blue];
+	"input " -> "Itest  ";
+	sgf -> aas;
+	aas -> aar;
+	aar -> aamk;
+	aamk -> aaj;
+	aaj -> aahj;
+	aahj -> aagju;
+	aa	 [color=blue];
+	aagju -> aa;
+}

@@ -163,7 +163,7 @@ class Tree(object):
         self._head.add_child_node(node, leaf_num)
 
 
-    def insert_node(self, path, data, is_end_node=0, leaf_num=10, no_cutting=0, rebuild=0):
+    def insert_node(self, path, data, para, is_end_node=0, no_cutting=0, rebuild=0):
         """ 向树种插入一个节点,该节点挂在path的末端
 
         Args:
@@ -171,8 +171,13 @@ class Tree(object):
             data: 节点数据
             no_cutting: 该节点不剪枝 ，如果no_cutting==1，则该节点不减枝
         Returns:
+
         """
-        global NO_CUTTING
+        NO_CUTTING = 0
+        if rebuild == 0:
+            NO_CUTTING = para['NO_CUTTING']
+        leaf_num = para['leaf_num']
+
         cur = self._head
         for step in path:
             if cur._change_to_leaf == 1:
@@ -279,7 +284,7 @@ class WordsFrequencyTree(object):
 
         return [path[0], list(set(_path))]
 
-    def auto_temp(self, logs, words_frequency, leaf_num=10, rebuild=0,CUTTING_PERCENT=0):
+    def auto_temp(self, logs, words_frequency, para, rebuild=0):
         """
 
         Args:
@@ -291,6 +296,13 @@ class WordsFrequencyTree(object):
         Returns:
 
         """
+        leaf_num = para['leaf_num']
+        CUTTING_PERCENT = 0
+        # print ('rebuild',rebuild)
+        if rebuild == 0:
+            CUTTING_PERCEN = para['CUTTING_PERCENT']
+
+
         assert logs != []
         assert words_frequency != []
         # global  CUTTING_PERCENT
@@ -335,9 +347,9 @@ class WordsFrequencyTree(object):
                     no_cutting = 1
                 if index == words_len - 1:
                     # self.tree_list[pid].insert_node(words[:index], value, 0, leaf_num, no_cutting, rebuild)# 暂时去掉模板子集的限制，即不检测最后一个结点了，即只保留长模板
-                    self.tree_list[pid].insert_node(words[:index], value, 1,leaf_num, no_cutting, rebuild)#检测最后一个节点！ 保留短模板
+                    self.tree_list[pid].insert_node(words[:index], value, para, 1, no_cutting, rebuild) #检测最后一个节点！ 保留短模板
                 else:
-                    self.tree_list[pid].insert_node(words[:index], value, 0, leaf_num, no_cutting,rebuild)
+                    self.tree_list[pid].insert_node(words[:index], value, para, 0, no_cutting, rebuild)
 
 
         #过滤掉重复的单词
@@ -361,7 +373,7 @@ class WordsFrequencyTree(object):
         #         else:
         #             self.tree_list[pid].insert_node(words[:index], value, 0, leaf_num)
 
-    def do(self, logs, output_name, fre_word_path, leaf_num=10):
+    def do(self, logs, para):
         """
         Args:
             pids: a list, pid 集合
@@ -375,6 +387,13 @@ class WordsFrequencyTree(object):
             all_paths: a dict, 包含了特征树的所有路径,每一条路径是一个模板
             words_frequency: a list, 包含了本轮迭代的词频结果
         """
+
+        template_path = para['template_path']
+        fre_word_path = para['fre_word_path']
+        leaf_num = para['leaf_num']
+        CUTTING_PERCENT = para['CUTTING_PERCENT']
+        plot_flag = para['plot_flag']
+
         if not logs:
             return {}
 
@@ -411,11 +430,12 @@ class WordsFrequencyTree(object):
             f.writelines(w+'\n')
 
         self._init_tree(pids)
-        self.auto_temp(lines, words_frequency, leaf_num, CUTTING_PERCENT=CUTTING_PERCENT)
+        self.auto_temp(lines, words_frequency, para)
+        #self.auto_temp(lines, words_frequency, leaf_num, CUTTING_PERCENT=CUTTING_PERCENT)
 
-
-        #画树，dratTreee，画图，放到输出模板之前，是因为traversal_tree函数会修改is_end变量的值，存在bug！！
-        # self.drawTree()#画树，dratTreee，画图
+        if plot_flag == 1:
+            #画树，dratTreee，画图，放到输出模板之前，是因为traversal_tree函数会修改is_end变量的值，存在bug！！
+            self.drawTree()#画树，dratTreee，画图
 
 
 
@@ -439,7 +459,7 @@ class WordsFrequencyTree(object):
 
 
         # 将每条模板存储到对应的pid文件夹中
-        f = open(output_name, 'w')
+        f = open(template_path, 'w')
         i = 1
         for pid in all_paths:
             for path in all_paths[pid]:
@@ -538,11 +558,21 @@ def getMsgFromNewSyslog(log, msg_id_index=3):
     return (msg_root, msg_list)
 
 
-def getLogsAndSave(path, output_name, fre_word_path, leaf_num = 10, short_threshold = 5):
+def getLogsAndSave(para):
     '''
         e为跳出的阈值
         return : log_list,log_num
     '''
+
+
+
+    path = para['data_path']
+    output_name = para['template_path']
+    fre_word_path = para['fre_word_path']
+    leaf_num = para['leaf_num']
+    short_threshold = para['short_threshold']
+
+
     short_log=0
     n = 0
     log_once_list = []
@@ -558,14 +588,14 @@ def getLogsAndSave(path, output_name, fre_word_path, leaf_num = 10, short_thresh
             if not log:
                 continue
             return_msg=getMsgFromNewSyslog(log)
-            if len(return_msg[1]) < short_threshold:#过滤长度小于5的日志
+            if len(return_msg[1]) < short_threshold: #过滤长度小于5的日志
                 short_log+=1
                 continue
             log_once_list.append(getMsgFromNewSyslog(log))
 
     print ('creating template')
     # print len(log_once_list)
-    wft.do(log_once_list, output_name, fre_word_path, leaf_num)
+    wft.do(log_once_list, para)
     print ('filting # short logs:',short_log,'| threshold =',short_threshold)
     print ('template_path:', output_name)
     print ('fre_word_path:', fre_word_path)
@@ -574,33 +604,39 @@ def getLogsAndSave(path, output_name, fre_word_path, leaf_num = 10, short_thresh
 
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--FIRST_COL', help='FIRST_COL', type=int, default=0)#表示日志数据从第几列开始，若纯logs，则为0 
+    parser.add_argument('--NO_CUTTING', help='NO_CUTTING', type=int, default=1)#初步设定1时，是前60% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
+    parser.add_argument('--CUTTING_PERCENT', help='CUTTING_PERCENT',type=float, default=0.3)
+    parser.add_argument('--data_path', type=str, default='./input.dat')
+    parser.add_argument('--template_path', type=str, default='./output.template')
+    parser.add_argument('--fre_word_path', type=str, default='./output.fre')
+    parser.add_argument('--picture_path', type=str, default='./tree.png')
+    parser.add_argument('--leaf_num', type=int, default=6)
+    parser.add_argument('--short_threshold', type=int, default=5)#过滤掉长度小于5的日志
+    parser.add_argument('--plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)#如果要画图 则为1
+    args = parser.parse_args()
 
-    threads = []
-    FIRST_COL=0 #表示日志数据从第几列开始，若纯logs，则为0  msg = ' '.join(word_list[FIRST_COL:])
-    if len(sys.argv) > 1:
-        data_path = sys.argv[1]
-        out_path = sys.argv[2]
-        leaf_num = int(sys.argv[3])
-        picture_path = sys.argv[4]
-    else:
-        NO_CUTTING = 1 #初步设定1时，是前60% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
-        CUTTING_PERCENT =0.6
-        # data_path='input.txt'
-        data_path = "./input.dat"
-        template_path = "./output.template"
-        fre_word_path = "./output.fre"
-        leaf_num = 6
-        picture_path = './tree.png'
-        short_threshold = 5 #过滤掉长度小于5的日志
-        #add_child_node 中的cut_level设置了前几层不剪枝
-    n = 0
+    para = {
+        'FIRST_COL' : args.FIRST_COL,
+        'NO_CUTTING' : args.NO_CUTTING,
+        'CUTTING_PERCENT' : args.CUTTING_PERCENT,
+        'data_path' : args.data_path,
+        'template_path' : args.template_path,
+        'fre_word_path' : args.fre_word_path,
+        'leaf_num' : args.leaf_num,
+        'picture_path' : args.picture_path,
+        'short_threshold' : args.short_threshold,
+        'plot_flag' : args.plot_flag
+    }
+
     if True:
-        getLogsAndSave(data_path, template_path, fre_word_path, leaf_num, short_threshold)
-        print ('leaf_num',leaf_num)
+        getLogsAndSave(para)
+        print ('leaf_num',para['leaf_num'])
         print ('max_org',max_org)
-        print (str(CUTTING_PERCENT*100)+'% nodes are not cut' if NO_CUTTING else 'all nodes are cut')
-
-    print ("end all")
+        print (str(para['CUTTING_PERCENT']*100)+'% nodes are not cut' if para['NO_CUTTING'] else 'all nodes are cut')
+    print ("training finished")
 
 
 

@@ -93,13 +93,15 @@ class Match:
     #         for template in IN:
     #             self.template_list.append(template)
 
-    def __init__(self,template_path, fre_word_path):
+    def __init__(self,para):
         '''
             Return:
                 wft:树的根节点
                 words_frequency:从文件中读取的词频列表
                 template_tag_dir: 模板号跟模板的对应关系，其中模板是字符串
         '''
+        template_path = para['template_path']
+        fre_word_path = para['fre_word_path']
         wft = ft_tree.WordsFrequencyTree()
         with open(template_path) as IN:
             for line in IN:
@@ -117,8 +119,9 @@ class Match:
         wft._nodes = []
         for words in self.log_once_list:
             wft._init_tree([''])
-        wft.auto_temp(self.log_once_list, self.words_frequency,rebuild=1)
+        wft.auto_temp(self.log_once_list, self.words_frequency, para, rebuild=1)
         self.tree = wft
+
     def drawTree(self):
 
         #draw trees
@@ -200,10 +203,14 @@ class Match:
 
         return tag, cur_match
 
-    def matchLogsFromFile(self, raw_log_path, out_seq_path, short_threshold=5):
+    def matchLogsFromFile(self, para):
         '''
          如果没匹配上，会生成0, 原始代码
         '''
+        raw_log_path = para['log_path']
+        out_seq_path = para['out_seq_path']
+        short_threshold = para['short_threshold']
+
         f = open(out_seq_path, 'w')
         short_log = 0
         # short_threshold = 5
@@ -225,18 +232,26 @@ class Match:
                     count_zero += 1
                     # print line
 
+        if para['plot_flag'] == 1:
+            self.drawTree() #画ft-tree
+
         print('filting # short logs:', short_log, '| threshold =', short_threshold)
         print('# of unmatched log (except filting):', count_zero)
         print('# of total logs:', total_num)
         print('seq_file_path:', out_seq_path)
 
 
-    def matchLogsAndLearnTemplateOneByOne(self, template_path, new_logs_path, out_seq_path, short_threshold = 5):
+    def matchLogsAndLearnTemplateOneByOne(self, para):
         '''
             增量学习模板
             如果没匹配上，会生成新的模板，然后返回新的模板号
             每条日志单条学习，流式数据学习
         '''
+        template_path = para['template_path']
+        new_logs_path = para['log_path']
+        out_seq_path = para['out_seq_path']
+        short_threshold = para['short_threshold']
+
         f = open(out_seq_path, 'w')
         short_log = 0
         # short_threshold = 5
@@ -288,15 +303,23 @@ class Match:
         print ('# of total logs:',total_num)
         print ('seq_file_path:',out_seq_path)
 
+        if para['plot_flag'] == 1:
+            self.drawTree()
 
 
 
-
-    def LearnTemplateByIntervals(self, template_path, new_logs_path, leaf_num =10, short_threshold = 5):
+    def LearnTemplateByIntervals(self, para):
         '''
             增量学习模板
             每一时段增量学习一次
         '''
+        # print (para)
+        template_path = para['template_path']
+        new_logs_path = para['log_path']
+        leaf_num = para['leaf_num']
+        short_threshold = para['short_threshold']
+
+
         f = open(template_path, 'a')
         short_log = 0
         count_zero = 0
@@ -325,7 +348,7 @@ class Match:
                     #增量学习
                     # temp_tree=self.tree
                     cur_log_once_list=[['', log_words]]
-                    self.tree.auto_temp(cur_log_once_list, self.words_frequency, leaf_num)
+                    self.tree.auto_temp(cur_log_once_list, self.words_frequency, para)
 
 
        
@@ -374,28 +397,51 @@ class Match:
                 log_words = ft_tree.getMsgFromNewSyslog(line)[1]
                 tag, cur_match = self.match(log_words)
                 # print (tag, cur_match)
-
-        self.drawTree()
+        if para['plot_flag'] == 1:
+            self.drawTree()
 
         print ('filting # short logs:',short_log,'| threshold =',short_threshold)
         print ('# of unmatched log (except filting):', count_zero)
         print ('# of total logs:',total_num)
-        print ('seq_file_path:',out_seq_path)
+        print ('seq_file_path:',para['out_seq_path'])
 
 
 
 
 if __name__ == "__main__":
-    short_threshold = 5 #过滤掉长度小于5的日志
-    template_path = "./output.template"
-    fre_word_path = "./output.fre"
-    raw_log_path = './newlogs.dat'
-    out_seq_path = './output.seq'
-    leaf_num = 6 #增量学习时的剪枝阈值  （如果将6改成10，可以看出不同，即LearnTemplateByIntervals会对新来的数据做剪枝）
-    mt = Match(template_path, fre_word_path)
-#    mt.drawTree() #画ft-tree
-#     mt.matchLogsFromFile(raw_log_path, out_seq_path, short_threshold)
-    # mt.matchLogsAndLearnTemplateOneByOne(template_path, raw_log_path, out_seq_path, short_threshold)
-    mt.LearnTemplateByIntervals(template_path, raw_log_path, leaf_num, short_threshold)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--short_threshold', help='short_threshold', type=int, default=5)
+    parser.add_argument('--leaf_num', help='增量学习时的剪枝阈值 ,如果将6改成10，可以看出不同，即LearnTemplateByIntervals会对新来的数据做剪枝', type=int, default=6)
+    parser.add_argument('--template_path', help='plot_flag', type=str, default="./output.template")
+    parser.add_argument('--fre_word_path', help='fre_word_path', type=str, default="./output.fre")
+    parser.add_argument('--log_path', help='log_path', type=str, default='./newlogs.dat')
+    parser.add_argument('--out_seq_path', help='out_seq_path', type=str, default='./output.seq')
+    parser.add_argument('--plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)
+    parser.add_argument('--CUTTING_PERCENT', help='增量学习时会用到，正常匹配用不到',type=float, default=0.3)
+    parser.add_argument('--NO_CUTTING', help='增量学习时会用到，正常匹配用不到', type=int, default=1)#初步设定1时，是前60% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
+    parser.add_argument('--match_model', help='1:正常匹配  2:单条增量学习&匹配 3:批量增量学习&匹配', type=int, default=1)
+    args = parser.parse_args()
+
+    para = {
+        'short_threshold' : args.short_threshold,
+        'leaf_num' : args.leaf_num,
+        'template_path' : args.template_path,
+        'fre_word_path' : args.fre_word_path,
+        'log_path' : args.log_path,
+        'out_seq_path' : args.out_seq_path,
+        'CUTTING_PERCENT' : args.CUTTING_PERCENT,
+        'plot_flag' : args.plot_flag,
+        'NO_CUTTING' : args.NO_CUTTING,
+        'match_model' : args.match_model
+    }
+
+    mt = Match(para)#template_path, fre_word_path
+    if para['match_model'] == 1:
+        mt.matchLogsFromFile(para)#按照现有模板匹配日志，匹配不到则设置为0 
+    if para['match_model'] == 2:
+        mt.matchLogsAndLearnTemplateOneByOne(para)#增量学习模板，每条增量
+    if para['match_model'] == 3:
+        mt.LearnTemplateByIntervals(para) #增量学习模板，日志分批增量学习
     print ('match end~~~')
 
