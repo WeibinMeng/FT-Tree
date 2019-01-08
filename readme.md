@@ -1,3 +1,11 @@
+# Paper
+
+Our paper is published on IEEE/ACM International Symposium on Quality of Service. The information can be found here:
+
+* Title: Syslog Processing for Switch Failure Diagnosis and Prediction in Datacenter Networks
+* Authors: Shenglin Zhang, Weibin Meng, Jiahao Bu, Sen Yang, Ying Liu, Dan Pei, Jun(Jim) Xu, Yu Chen, Hui Dong, Xianping Qu, Lei Song
+* Paper link: [paper](https://netman.aiops.org/wp-content/uploads/2015/12/IWQOS_2017_zsl.pdf)
+
 ## 环境：
 	python3
 
@@ -51,10 +59,3 @@
  模板分析：输出前10个常出现的模板，以及每个模板对应的日志
  
  
-# Paper
-
-Our paper is published on IEEE/ACM International Symposium on Quality of Service. The information can be found here:
-
-* Title: Syslog Processing for Switch Failure Diagnosis and Prediction in Datacenter Networks
-* Authors: Shenglin Zhang, Weibin Meng, Jiahao Bu, Sen Yang, Ying Liu, Dan Pei, Jun(Jim) Xu, Yu Chen, Hui Dong, Xianping Qu, Lei Song
-* Paper link: [paper](https://netman.aiops.org/wp-content/uploads/2015/12/IWQOS_2017_zsl.pdf)
