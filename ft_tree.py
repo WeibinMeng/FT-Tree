@@ -5,7 +5,7 @@
 # * Author        : Weibin Meng
 # * Email         : mwb16@mails.tsinghua.edu.cn
 # * Create time   : 2016-12-09 12:16
-# * Last modified : 2018-09-09 11:02
+# * Last modified : 2019-01-08 09:39
 # * Filename      : ft_tree.py
 # * Description   :
 '''
@@ -606,10 +606,10 @@ def getLogsAndSave(para):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--FIRST_COL', help='FIRST_COL', type=int, default=0)#表示日志数据从第几列开始，若纯logs，则为0 
-    parser.add_argument('--NO_CUTTING', help='NO_CUTTING', type=int, default=1)#初步设定1时，是前60% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
+    parser.add_argument('--FIRST_COL', help='FIRST_COL', type=int, default=0)#表示日志数据从第几列开始，若纯logs，则为0
+    parser.add_argument('--NO_CUTTING', help='NO_CUTTING', type=int, default=1)#初步设定1时，是前30% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
     parser.add_argument('--CUTTING_PERCENT', help='CUTTING_PERCENT',type=float, default=0.3)
-    parser.add_argument('--data_path', type=str, default='./input.dat')
+    parser.add_argument('--data_path', type=str, default='./training.log')
     parser.add_argument('--template_path', type=str, default='./output.template')
     parser.add_argument('--fre_word_path', type=str, default='./output.fre')
     parser.add_argument('--picture_path', type=str, default='./tree.png')

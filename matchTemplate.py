@@ -5,7 +5,7 @@
 # * Author        : Weibin Meng
 # * Email         : mwb16@mails.tsinghua.edu.cn
 # * Create time   : 2016-12-05 03:16
-# * Last modified : 2018-09-09 01:01
+# * Last modified : 2019-01-08 09:49
 # * Filename      : matchTemplate.py
 # * Description   :
 '''
@@ -270,7 +270,7 @@ class Match:
                     short_log+=1
                     tag = -1
 
-                
+
                 #如果匹配不上，则增量学习模板
                 if tag == 0:
                     print ('learned a new template:')
@@ -351,7 +351,7 @@ class Match:
                     self.tree.auto_temp(cur_log_once_list, self.words_frequency, para)
 
 
-       
+
        # 遍历特征树,每条路径作为一个模板
         all_paths = {}
 
@@ -369,7 +369,7 @@ class Match:
 
         typeList = []
         # 将每条模板存储到对应的pid文件夹中
-       
+
         i = 1
         print ('new templates:')
         for pid in all_paths:
@@ -415,7 +415,7 @@ if __name__ == "__main__":
     parser.add_argument('--leaf_num', help='增量学习时的剪枝阈值 ,如果将6改成10，可以看出不同，即LearnTemplateByIntervals会对新来的数据做剪枝', type=int, default=6)
     parser.add_argument('--template_path', help='plot_flag', type=str, default="./output.template")
     parser.add_argument('--fre_word_path', help='fre_word_path', type=str, default="./output.fre")
-    parser.add_argument('--log_path', help='log_path', type=str, default='./newlogs.dat')
+    parser.add_argument('--log_path', help='log_path', type=str, default='./new.log')
     parser.add_argument('--out_seq_path', help='out_seq_path', type=str, default='./output.seq')
     parser.add_argument('--plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)
     parser.add_argument('--CUTTING_PERCENT', help='增量学习时会用到，正常匹配用不到',type=float, default=0.3)
@@ -438,7 +438,7 @@ if __name__ == "__main__":
 
     mt = Match(para)#template_path, fre_word_path
     if para['match_model'] == 1:
-        mt.matchLogsFromFile(para)#按照现有模板匹配日志，匹配不到则设置为0 
+        mt.matchLogsFromFile(para)#按照现有模板匹配日志，匹配不到则设置为0
     if para['match_model'] == 2:
         mt.matchLogsAndLearnTemplateOneByOne(para)#增量学习模板，每条增量
     if para['match_model'] == 3:
