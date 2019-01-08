@@ -1,3 +1,7 @@
+__pycache__
+.DS_Store
+*.png
+*.dot
 *.fre
 *.in
 *.template
