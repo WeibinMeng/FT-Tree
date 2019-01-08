@@ -606,16 +606,16 @@ def getLogsAndSave(para):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--FIRST_COL', help='FIRST_COL', type=int, default=0)#表示日志数据从第几列开始，若纯logs，则为0
-    parser.add_argument('--NO_CUTTING', help='NO_CUTTING', type=int, default=1)#初步设定1时，是前30% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
-    parser.add_argument('--CUTTING_PERCENT', help='CUTTING_PERCENT',type=float, default=0.3)
-    parser.add_argument('--data_path', type=str, default='./training.log')
-    parser.add_argument('--template_path', type=str, default='./output.template')
-    parser.add_argument('--fre_word_path', type=str, default='./output.fre')
-    parser.add_argument('--picture_path', type=str, default='./tree.png')
-    parser.add_argument('--leaf_num', type=int, default=6)
-    parser.add_argument('--short_threshold', type=int, default=5)#过滤掉长度小于5的日志
-    parser.add_argument('--plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)#如果要画图 则为1
+    parser.add_argument('-FIRST_COL', help='FIRST_COL', type=int, default=0)#表示日志数据从第几列开始，若纯logs，则为0
+    parser.add_argument('-NO_CUTTING', help='NO_CUTTING', type=int, default=1)#初步设定1时，是前30% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
+    parser.add_argument('-CUTTING_PERCENT', help='CUTTING_PERCENT',type=float, default=0.3)
+    parser.add_argument('-data_path', type=str, default='./training.log')
+    parser.add_argument('-template_path', type=str, default='./output.template')
+    parser.add_argument('-fre_word_path', type=str, default='./output.fre')
+    parser.add_argument('-picture_path', type=str, default='./tree.png')
+    parser.add_argument('-leaf_num', type=int, default=6)
+    parser.add_argument('-short_threshold', type=int, default=5)#过滤掉长度小于5的日志
+    parser.add_argument('-plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)#如果要画图 则为1
     args = parser.parse_args()
 
     para = {

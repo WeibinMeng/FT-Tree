@@ -411,16 +411,16 @@ class Match:
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--short_threshold', help='short_threshold', type=int, default=5)
-    parser.add_argument('--leaf_num', help='增量学习时的剪枝阈值 ,如果将6改成10，可以看出不同，即LearnTemplateByIntervals会对新来的数据做剪枝', type=int, default=6)
-    parser.add_argument('--template_path', help='plot_flag', type=str, default="./output.template")
-    parser.add_argument('--fre_word_path', help='fre_word_path', type=str, default="./output.fre")
-    parser.add_argument('--log_path', help='log_path', type=str, default='./new.log')
-    parser.add_argument('--out_seq_path', help='out_seq_path', type=str, default='./output.seq')
-    parser.add_argument('--plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)
-    parser.add_argument('--CUTTING_PERCENT', help='增量学习时会用到，正常匹配用不到',type=float, default=0.3)
-    parser.add_argument('--NO_CUTTING', help='增量学习时会用到，正常匹配用不到', type=int, default=1)#初步设定1时，是前60% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
-    parser.add_argument('--match_model', help='1:正常匹配  2:单条增量学习&匹配 3:批量增量学习&匹配', type=int, default=1)
+    parser.add_argument('-short_threshold', help='short_threshold', type=int, default=5)
+    parser.add_argument('-leaf_num', help='增量学习时的剪枝阈值 ,如果将6改成10，可以看出不同，即LearnTemplateByIntervals会对新来的数据做剪枝', type=int, default=6)
+    parser.add_argument('-template_path', help='plot_flag', type=str, default="./output.template")
+    parser.add_argument('-fre_word_path', help='fre_word_path', type=str, default="./output.fre")
+    parser.add_argument('-log_path', help='log_path', type=str, default='./new.log')
+    parser.add_argument('-out_seq_path', help='out_seq_path', type=str, default='./output.seq')
+    parser.add_argument('-plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)
+    parser.add_argument('-CUTTING_PERCENT', help='增量学习时会用到，正常匹配用不到',type=float, default=0.3)
+    parser.add_argument('-NO_CUTTING', help='增量学习时会用到，正常匹配用不到', type=int, default=1)#初步设定1时，是前60% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
+    parser.add_argument('-match_model', help='1:正常匹配  2:单条增量学习&匹配 3:批量增量学习&匹配', type=int, default=1)
     args = parser.parse_args()
 
     para = {

@@ -12,7 +12,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 ## ft-tree.py：
 * 输出文件：模板、单词词频列表
 	* 运行脚本的的命令：
-		* python ft\_tree.py --FIRST\_COL 0 --NO\_CUTTING 1 --CUTTING\_PERCENT 0.3 --data\_path ./training.log --template_path ./output.template --fre\_word\_path ./output.fre --picture\_path ./tree.png --leaf\_num 6 --short\_threshold 5 --plot\_flag 1
+		* python ft\_tree.py -FIRST\_COL 0 -NO\_CUTTING 1 -CUTTING\_PERCENT 0.3 -data\_path ./training.log -template_path ./output.template -fre\_word\_path ./output.fre -picture\_path ./tree.png -leaf\_num 6 -short\_threshold 5 -plot\_flag 1
 	* 参数样例：
 	   * FIRST\_COL 每行日志从第几列作为输入，默认为0
 	   * NO\_CUTTING = 0 #初步设定1时，是前30% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
@@ -28,7 +28,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 	
 ## matchTemplate.py:
 * 运行脚本的的命令：
-	* python matchTemplate.py --short\_threshold 5 --leaf\_num 6 --template\_path ./output.template --fre\_word\_path ./output.fre --log\_path ./new.log --out\_seq\_path ./output.seq --plot\_flag 0 --CUTTING\_PERCENT 0.3 --NO\_CUTTING 1 --match\_model 1
+	* python matchTemplate.py -short\_threshold 5 -leaf\_num 6 -template\_path ./output.template -fre\_word\_path ./output.fre -log\_path ./new.log -out\_seq\_path ./output.seq -plot\_flag 0 -CUTTING\_PERCENT 0.3 -NO\_CUTTING 1 -match\_model 1
 		
 * 参数样例：
 	*	short\_threshold = 2 #过滤掉长度小于5的日志
