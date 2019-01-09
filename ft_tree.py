@@ -545,7 +545,7 @@ def getMsgFromNewSyslog(log, msg_id_index=3):
     # msg = re.sub('Mar|Apr|Dec|Jan|Feb|Nov|Oct|May|Jun|Jul|Aug|Sep', '', msg)
     # msg = re.sub(':?(\w+:)+', '', msg)
     msg = re.sub('\.|\(|\)|\<|\>|\/|\-|\=|\[|\]|,|:', ' ', msg)
-    msg = re.sub('\b(0[xX])?[A-Fa-f0-9]+\b', ' ', msg)#过滤十六进制的内存地址
+    msg = re.sub('\\b(0[xX])?[A-Fa-f0-9]+\\b', ' ', msg)#过滤十六进制的内存地址
     msg = re.sub('(\s|^)[1-9]\d*(\s|$)', '', msg)#过滤连续的纯数字
 
     msg_list = msg.split()
