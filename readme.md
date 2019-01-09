@@ -7,7 +7,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 * Paper link: [paper](https://netman.aiops.org/wp-content/uploads/2015/12/IWQOS_2017_zsl.pdf)
 
 ## 环境：
-	python3
+	python3, pygraphviz
 
 ## ft-tree.py：
 * 输出文件：模板、单词词频列表
