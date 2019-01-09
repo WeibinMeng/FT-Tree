@@ -539,7 +539,7 @@ def getMsgFromNewSyslog(log, msg_id_index=3):
     # msg = ' '.join(word_list[FIRST_COL:])
     msg = log
 
-    msg = re.sub('(:(?=\s))|((?<=\s):)', '', msg)
+    msg = re.sub('(:(?=\s))|((?<=\s):)', ' ', msg)
     # msg = re.sub('(\d+\.)+\d+', '', msg)
     # msg = re.sub('\d{2}:\d{2}:\d{2}', '', msg)
     # msg = re.sub('Mar|Apr|Dec|Jan|Feb|Nov|Oct|May|Jun|Jul|Aug|Sep', '', msg)
