@@ -103,14 +103,19 @@ class Match:
         template_path = para['template_path']
         fre_word_path = para['fre_word_path']
         wft = ft_tree.WordsFrequencyTree()
+        tag = 1 #模板号从1 开始
         with open(template_path) as IN:
             for line in IN:
                 # print line
-                self.log_once_list.append(['',line.strip().split()[1:]])
-                tag = line.strip().split()[0]
-                template = ' '.join(line.strip().split()[1:])
+                self.log_once_list.append(['',line.strip().split()])
+                #从template文件中读取tag
+                #tag = line.strip().split()[0]
+                #template = ' '.join(line.strip().split()[1:])
+                template = line.strip()
                 self.template_tag_dir[template] = tag
                 self.tag_template_dir[tag] = template
+                tag += 1
+        # print(self.tag_template_dir)
 
         with open(fre_word_path) as IN:
             for line in IN:
@@ -172,19 +177,20 @@ class Match:
 
         '''
         #鲁棒，输入str也是可以的
-        if type(log_words) ==type(''):
+        if type(log_words) == type(''):
              log_words = ft_tree.getMsgFromNewSyslog(log_words)[1]
 
 
         #sort raw log
         words_index = {}
         for word in log_words:
-
                 if word in self.words_frequency:
                     words_index[word] = self.words_frequency.index(word)
+                # else:
+                #     print(word,'not in the dict')
         words = [x[0] for x in sorted(words_index.items(), key=lambda x: x[1])]
 
-
+        # print(words)
         cur_match = []
         cur_node = self.tree.tree_list['']._head
         for word in words:
@@ -192,14 +198,10 @@ class Match:
                 cur_node = cur_node.find_child_node(word)
                 cur_match.append(word)
         cur_match = ' '.join(cur_match) #
+        # print(cur_match+"\n")
         #匹配不到的话 输出0
         tag = self.template_tag_dir[cur_match] if cur_match in self.template_tag_dir else 0
 
-#        if int(tag) == 131:
-#            print 'log_words',log_words
-#            print 'order_words',words
-#            print 'cur_match',cur_match
-#            print ''
 
         return tag, cur_match
 
@@ -207,6 +209,10 @@ class Match:
         '''
          如果没匹配上，会生成0, 原始代码
         '''
+        if para['plot_flag'] == 1:
+            self.drawTree() #画ft-tree
+
+
         raw_log_path = para['log_path']
         out_seq_path = para['out_seq_path']
         short_threshold = para['short_threshold']
@@ -232,8 +238,7 @@ class Match:
                     count_zero += 1
                     # print line
 
-        if para['plot_flag'] == 1:
-            self.drawTree() #画ft-tree
+
 
         print('filting # short logs:', short_log, '| threshold =', short_threshold)
         print('# of unmatched log (except filting):', count_zero)

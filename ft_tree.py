@@ -467,8 +467,8 @@ class WordsFrequencyTree(object):
                 #print (i, pid)
                 print (i, pid, end=' ')
                 # 首先把pid保存下来
-                #f.write(pid + " ") #不保存index
-                f.write(str(i)+' '+pid + " ")#保存index，从1开始
+                f.write(pid + " ") #不保存index
+                #f.write(str(i)+' '+pid + " ")#保存index，从1开始
                 for w in path:
                     #print (w)
                     print (w, end=' ')
@@ -565,8 +565,6 @@ def getLogsAndSave(para):
         e为跳出的阈值
         return : log_list,log_num
     '''
-
-
 
     path = para['data_path']
     output_name = para['template_path']
