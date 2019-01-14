@@ -5,7 +5,7 @@
 # * Author        : Weibin Meng
 # * Email         : mwb16@mails.tsinghua.edu.cn
 # * Create time   : 2016-12-09 12:16
-# * Last modified : 2019-01-10 09:43
+# * Last modified : 2019-01-14 14:49
 # * Filename      : ft_tree.py
 # * Description   :
 '''
@@ -467,8 +467,8 @@ class WordsFrequencyTree(object):
                 #print (i, pid)
                 print (i, pid, end=' ')
                 # 首先把pid保存下来
-                f.write(pid + " ") #不保存index
-                #f.write(str(i)+' '+pid + " ")#保存index，从1开始
+                #f.write(pid + " ") #不保存index
+                f.write(str(i)+' '+pid + " ")#保存index，从1开始
                 for w in path:
                     #print (w)
                     print (w, end=' ')
