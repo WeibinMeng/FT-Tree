@@ -9,7 +9,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 ## 环境：
 	python3, pygraphviz
 
-## ft-tree.py：
+## 训练日志模板：
 * 输出文件：模板、单词词频列表
 	* 运行脚本的的命令：
 		* python ft\_tree.py -FIRST\_COL 0 -NO\_CUTTING 1 -CUTTING\_PERCENT 0.3 -data\_path ./training.log -template_path ./output.template -fre\_word\_path ./output.fre -picture\_path ./tree.png -leaf\_num 6 -short\_threshold 5 -plot\_flag 1
@@ -26,9 +26,9 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 	    *  plot\_flag 默认为0，不画图，若为1，则将ft\_tree画出来，会同时画出“短模板”（蓝色）和“剪枝结点”(红色)
 
 	
-## matchTemplate.py:
+## 匹配ft-tree的日志模板:
 * 运行脚本的的命令：
-	* python matchTemplate.py -short\_threshold 5 -leaf\_num 6 -template\_path ./output.template -fre\_word\_path ./output.fre -log\_path ./new.log -out\_seq\_path ./output.seq -plot\_flag 0 -CUTTING\_PERCENT 0.3 -NO\_CUTTING 1 -match\_model 1
+	* python3 matchTemplate.py -short\_threshold 5 -leaf\_num 6 -template\_path ./output.template -fre\_word_path ./output.fre -log\_path ./training.log -out\_seq\_path ./output.seq -plot\_flag 0 -CUTTING\_PERCENT 0.3 -NO\_CUTTING 1 **-match\_model 1**
 		
 * 参数样例：
 	*	short\_threshold = 2 #过滤掉长度小于5的日志
@@ -48,17 +48,17 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 			例如在样例数据中，假设新来的日志为newlogs.dat， 原始的模板树为Trace\_train.png,当剪枝k=6时（如图reBuildTree\_k6），会剪枝，当阈值为10时（如图reBuildTree\_k10），会保留一些变量
 
 
-## orderWords.py:
+## 日志模板按照原始日志单词顺序排序:
 将模板中的单词按照原日志中的单词顺序排列,得到**正序模板**
 
 * 运行脚本的的命令：
-	*  python orderWords.py -templates ./output.template -sequences ./output.seq -rawlog ./training.log -order\_templates ./output.template\_order
+	*  python3 orderWords.py -templates ./output.template -sequences ./output.seq -rawlog ./training.log -order\_templates ./output.template\_order
 
-## matchByOrderedTemplate.py:
+## 按照正序模板匹配日志:
 按照日志原先的单词顺序匹配
 
 * 运行脚本的的命令：
-	* python matchByOrderedTemplate.py -short\_threshold 5 -leaf\_num 6 -template\_path ./output.template\_order -log\_path ./training.log -out\_seq\_path ./output.seq -plot\_flag 0 -CUTTING\_PERCENT 0.3 -NO\_CUTTING 1 **-match\_model 4**
+	* python3 matchTemplate.py -short\_threshold 5 -leaf\_num 6 -template\_path ./out\_logTemplate\_order.txt -log\_path ./training.log -out\_seq\_path ./output2.seq -plot\_flag 1 -CUTTING\_PERCENT 0.3 -NO\_CUTTING 1 **-match\_model 4**
 	
 ## splitTimeWindows.py:
  模板分析：切分时间窗口，然后统计正常时段、异常时段、全部时段中出现top10的模板，并且画图

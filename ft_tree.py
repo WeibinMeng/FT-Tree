@@ -315,6 +315,7 @@ class WordsFrequencyTree(object):
         for log in logs:
             pid, words = log
             words = list(set(words))#过滤掉重复的单词set
+            # print('-----------words_before_sorted-----------------')
             # print(words)
             words_index = {}
             words_count = {}
@@ -325,12 +326,10 @@ class WordsFrequencyTree(object):
                 if word not in words_count:
                     words_count[word]=0
                 words_count[word]+=1
-            # for k, v in words_index.items():
-            #     print(k, v)
 
             for word in words_count:
                 if words_count[word]>1:
-                    # print('words_count[word]>1')
+                    print('words_count[word]>1')
                     cur_word=word
                     for i in range(words_count[word]-1):
                         cur_word= cur_word+' '+word
@@ -339,7 +338,7 @@ class WordsFrequencyTree(object):
                     # print word
                     words_index.pop(word)
 
-            #======================anzhaocipin paixulog
+        
             words = [x[0] for x in sorted(words_index.items(), key=lambda x: x[1])]
             words_len = len(words)
             words = ' '.join(words).split()
@@ -406,7 +405,7 @@ class WordsFrequencyTree(object):
         for log in logs:
             pid, words = log
             words = list(words)#过滤掉重复的单词set
-            #print(words)
+            print(words)
             words_index = {}
             words_count = {}
             for word in words:
@@ -416,12 +415,12 @@ class WordsFrequencyTree(object):
                 if word not in words_count:
                     words_count[word]=0
                 words_count[word]+=1
-            # for k, v in words_index.items():
-            #     print(k, v)
+            for k, v in words_index.items():
+                print(k, v)
 
             for word in words_count:
                 if words_count[word]>1:
-                    #print('words_count[word]>1')
+                    print('words_count[word]>1')
                     cur_word=word
                     for i in range(words_count[word]-1):
                         cur_word= cur_word+' '+word
@@ -501,9 +500,6 @@ class WordsFrequencyTree(object):
         """
         words_frequency = sorted(words_frequency.items(), key=lambda x: (x[1], x[0]), reverse=True)
         words_frequency = [x[0] for x in words_frequency]
-        # print('words_frequency------------------------------------')
-        # print(words_frequency)
-        # print('---------------------------------------------------')
 
 
         f = open(fre_word_path, 'w')
@@ -609,7 +605,7 @@ class WordsFrequencyTree(object):
 
 def RecursionPreOrder(node):
     if(node is not None):
-        # print(node.get_data())
+        print(node.get_data())
         for child_node in node.get_children():
             RecursionPreOrder(node)
 
@@ -672,8 +668,7 @@ def getLogsAndSave(para):
             if not log:
                 continue
             return_msg=getMsgFromNewSyslog(log)
-            # print('---------return_msg--------------------------------------------------')
-            # print(return_msg)
+            
             if len(return_msg[1]) < short_threshold: #过滤长度小于5的日志
                 short_log+=1
                 continue
