@@ -2,11 +2,11 @@
 # -*- coding: UTF-8 -*-
 
 # **********************************************************
-# * Author        : Weibin Meng
+# * Author        : Weibin Meng, Yuqing Liu
 # * Email         : mwb16@mails.tsinghua.edu.cn
 # * Create time   : 2016-12-05 03:16
-# * Last modified : 2019-01-08 09:49
-# * Filename      : matchTemplate.py
+# * Last modified : 2019-01-23 21:35
+# * Filename      : matchByOrderedTemplate.py
 # * Description   :
 '''
     Match logs by templates
@@ -101,12 +101,17 @@ class Match:
                 template_tag_dir: 模板号跟模板的对应关系，其中模板是字符串
         '''
         template_path = para['template_path']
+        match_model = para['match_model']
+        # print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&init___template_path:', template_path)
+        # print('****************************init___match_model', match_model)
         fre_word_path = para['fre_word_path']
         wft = ft_tree.WordsFrequencyTree()
+
         tag = 1 #模板号从1 开始
         with open(template_path) as IN:
             for line in IN:
-                # print line
+                # print('linelinelinelinelineline---------------------------')
+                # print(line)
                 self.log_once_list.append(['',line.strip().split()])
                 #从template文件中读取tag
                 #tag = line.strip().split()[0]
@@ -116,16 +121,29 @@ class Match:
                 self.tag_template_dir[tag] = template
                 tag += 1
         # print(self.tag_template_dir)
+        # print('logoncelistlogoncelistlogoncelistlogoncelist-----------------')
+        # print(self.log_once_list)
 
-        with open(fre_word_path) as IN:
-            for line in IN:
-                self.words_frequency.append(line.strip())
-        wft.paths = []
-        wft._nodes = []
-        for words in self.log_once_list:
-            wft._init_tree([''])
-        wft.auto_temp(self.log_once_list, self.words_frequency, para, rebuild=1)
-        self.tree = wft
+
+        if match_model == 4:
+            #print('4444444444444444444444444444')
+            wft.paths = []
+            wft._nodes = []
+            for words in self.log_once_list:
+                wft._init_tree([''])
+            wft.auto_temp1(self.log_once_list, para, rebuild=1)
+            self.tree = wft
+        else:
+            #print('not4444444444444444444444444444')
+            with open(fre_word_path) as IN:
+                for line in IN:
+                    self.words_frequency.append(line.strip())
+            wft.paths = []
+            wft._nodes = []
+            for words in self.log_once_list:
+                wft._init_tree([''])
+            wft.auto_temp(self.log_once_list, self.words_frequency, para, rebuild=1)
+            self.tree = wft
 
     def drawTree(self):
 
@@ -168,7 +186,7 @@ class Match:
                 A.draw('reBuildTree.png') # write to file
 
 
-    def match(self,log_words):
+    def match(self,log_words, match_model=0):
         '''
             输入是list跟string都可以！
 
@@ -177,21 +195,25 @@ class Match:
 
         '''
         #鲁棒，输入str也是可以的
+        words = []
         if type(log_words) == type(''):
              log_words = ft_tree.getMsgFromNewSyslog(log_words)[1]
 
-
-        #sort raw log
-        words_index = {}
-        for word in log_words:
-                if word in self.words_frequency:
-                    words_index[word] = self.words_frequency.index(word)
-                # else:
-                #     print(word,'not in the dict')
-        words = [x[0] for x in sorted(words_index.items(), key=lambda x: x[1])]
-
-        # print('-------------------after sorting-----------------------')
-        # print(words)
+        if match_model == 4:
+            for word in log_words:
+                words.append(word)
+            #print('-------------------no sorting-----------------------')
+        else:
+            #sort raw log
+            words_index = {}
+            for word in log_words:
+                    if word in self.words_frequency:
+                        words_index[word] = self.words_frequency.index(word)
+                    # else:
+                    #     print(word,'not in the dict')
+            words = [x[0] for x in sorted(words_index.items(), key=lambda x: x[1])]
+            #print('-------------------after sorting-----------------------')
+        #print(words)
         cur_match = []
         cur_node = self.tree.tree_list['']._head
         for word in words:
@@ -203,20 +225,25 @@ class Match:
         #匹配不到的话 输出0
         tag = self.template_tag_dir[cur_match] if cur_match in self.template_tag_dir else 0
 
-
+        #print(tag, cur_match)
         return tag, cur_match
+
 
     def matchLogsFromFile(self, para):
         '''
          如果没匹配上，会生成0, 原始代码
         '''
+        #print('#######################################')
         if para['plot_flag'] == 1:
+            #print('#######################################')
             self.drawTree() #画ft-tree
 
 
         raw_log_path = para['log_path']
         out_seq_path = para['out_seq_path']
         short_threshold = para['short_threshold']
+        template_path = para['template_path']
+        match_model = para['match_model']
 
         f = open(out_seq_path, 'w')
         short_log = 0
@@ -227,9 +254,10 @@ class Match:
             for line in IN:
                 total_num += 1
                 timestamp = line.strip().split()[0]
-                #====================================jiangfanhui guolvguohou de ciyu  liebiao 
+                #====================================jiangfanhui guolvguohou de ciyu  liebiao
                 log_words = ft_tree.getMsgFromNewSyslog(line)[1]
-                tag,cur_match = self.match(log_words)
+
+                tag,cur_match = self.match(log_words, match_model)
                 if len(log_words) < short_threshold:  # 过滤长度小于5的日志
                     short_log += 1
                     tag = -1
@@ -246,6 +274,7 @@ class Match:
         print('# of unmatched log (except filting):', count_zero)
         print('# of total logs:', total_num)
         print('seq_file_path:', out_seq_path)
+        print('template_path:', template_path)
 
 
     def matchLogsAndLearnTemplateOneByOne(self, para):
@@ -258,6 +287,7 @@ class Match:
         new_logs_path = para['log_path']
         out_seq_path = para['out_seq_path']
         short_threshold = para['short_threshold']
+        match_model = para['match_model']
 
         f = open(out_seq_path, 'w')
         short_log = 0
@@ -269,7 +299,7 @@ class Match:
                 total_num +=1
                 timestamp = line.strip().split()[0]
                 log_words = ft_tree.getMsgFromNewSyslog(line)[1]
-                tag, cur_match = self.match(log_words)
+                tag, cur_match = self.match(log_words, match_model)
                 # print (line.strip())
                 # print ('~~cur_match:',cur_match)
                 # print ('')
@@ -325,6 +355,7 @@ class Match:
         new_logs_path = para['log_path']
         leaf_num = para['leaf_num']
         short_threshold = para['short_threshold']
+        match_model = para['match_model']
 
 
         f = open(template_path, 'a')
@@ -339,7 +370,7 @@ class Match:
                 total_num +=1
                 timestamp = line.strip().split()[0]
                 log_words = ft_tree.getMsgFromNewSyslog(line)[1]
-                tag, cur_match = self.match(log_words)
+                tag, cur_match = self.match(log_words, match_model)
                 # print (line.strip())
                 # print ('~~cur_match:',cur_match)
                 # print ('')
@@ -393,7 +424,7 @@ class Match:
                     tag = len(self.template_tag_dir)+1
                     self.template_tag_dir[cur_match]=tag
                     f.writelines(str(tag)+' '+cur_match+'\n')
-                    print (cur_match)
+                    #print (cur_match)
 
 
 
@@ -443,12 +474,31 @@ if __name__ == "__main__":
         'match_model' : args.match_model
     }
 
-    mt = Match(para)#template_path, fre_word_path
+    if para['match_model'] != 4:
+        mt = Match(para)#template_path, fre_word_path
     if para['match_model'] == 1:
         mt.matchLogsFromFile(para)#按照现有模板匹配日志，匹配不到则设置为0
-    if para['match_model'] == 2:
+    elif para['match_model'] == 2:
         mt.matchLogsAndLearnTemplateOneByOne(para)#增量学习模板，每条增量
-    if para['match_model'] == 3:
+    elif para['match_model'] == 3:
         mt.LearnTemplateByIntervals(para) #增量学习模板，日志分批增量学习
+    elif para['match_model'] == 4:
+        #args = parser.parse_args(['-plot_flag', '1', '-template_path', './out_logTemplate_order.txt', '-match_model', '4'])
+        para = {
+            'short_threshold' : args.short_threshold,
+            'leaf_num' : args.leaf_num,
+            'template_path' : args.template_path,
+            'fre_word_path' : args.fre_word_path,
+            'log_path' : args.log_path,
+            'out_seq_path' : args.out_seq_path,
+            'CUTTING_PERCENT' : args.CUTTING_PERCENT,
+            'plot_flag' : args.plot_flag,
+            'NO_CUTTING' : args.NO_CUTTING,
+            'match_model' : args.match_model
+        }
+        #print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@print_help()&&&&&&&&&&&&&&&&&&&&&&&')
+        #parser.print_help()
+        mt1 = Match(para)
+        mt1.matchLogsFromFile(para)
     print ('match end~~~')
 

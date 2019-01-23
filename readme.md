@@ -49,7 +49,16 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 
 
 ## orderWords.py:
-将模板中的单词按照原日志中的单词顺序排列
+将模板中的单词按照原日志中的单词顺序排列,得到**正序模板**
+
+* 运行脚本的的命令：
+	*  python orderWords.py -templates ./output.template -sequences ./output.seq -rawlog ./training.log -order\_templates ./output.template\_order
+
+## matchByOrderedTemplate.py:
+按照日志原先的单词顺序匹配
+
+* 运行脚本的的命令：
+	* python matchByOrderedTemplate.py -short\_threshold 5 -leaf\_num 6 -template\_path ./output.template\_order -log\_path ./training.log -out\_seq\_path ./output.seq -plot\_flag 0 -CUTTING\_PERCENT 0.3 -NO\_CUTTING 1 **-match\_model 4**
 	
 ## splitTimeWindows.py:
  模板分析：切分时间窗口，然后统计正常时段、异常时段、全部时段中出现top10的模板，并且画图

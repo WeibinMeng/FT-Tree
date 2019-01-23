@@ -116,7 +116,7 @@ class Node(object):
         if self._level>cut_level and len(self._children) == leaf_num and self._no_cutting != 1 and rebuild == 0:
         # if self._level>cut_level and len(self._children) == leaf_num and self.get_data() != 'org': #超过10个节点剪枝
             self.delete_children()
-            return False
+            return False 
 
         if self._change_to_leaf == 1:
             return False
@@ -310,10 +310,12 @@ class WordsFrequencyTree(object):
         # if CUTTING_PERCENT=='':
         #     CUTTING_PERCENT=0
         #保留重复单词
+        # words_index = {}
+        # words_count = {}
         for log in logs:
             pid, words = log
             words = list(set(words))#过滤掉重复的单词set
-            # print len(words)
+            # print(words)
             words_index = {}
             words_count = {}
             for word in words:
@@ -323,9 +325,12 @@ class WordsFrequencyTree(object):
                 if word not in words_count:
                     words_count[word]=0
                 words_count[word]+=1
+            # for k, v in words_index.items():
+            #     print(k, v)
 
             for word in words_count:
                 if words_count[word]>1:
+                    # print('words_count[word]>1')
                     cur_word=word
                     for i in range(words_count[word]-1):
                         cur_word= cur_word+' '+word
@@ -334,9 +339,12 @@ class WordsFrequencyTree(object):
                     # print word
                     words_index.pop(word)
 
+            #======================anzhaocipin paixulog
             words = [x[0] for x in sorted(words_index.items(), key=lambda x: x[1])]
             words_len = len(words)
             words = ' '.join(words).split()
+            # print('----------------words-----------------')
+            # print(words)
 
             # print len(words)
             for index, value in enumerate(words):
@@ -372,6 +380,76 @@ class WordsFrequencyTree(object):
         #             # self.tree_list[pid].insert_node(words[:index], value, 1,leaf_num)
         #         else:
         #             self.tree_list[pid].insert_node(words[:index], value, 0, leaf_num)
+
+
+    def auto_temp1(self, logs, para, rebuild=0):
+        """
+
+        Args:
+            pids: pids of all syslog
+            lines: 分词后的集合
+            words_frequency: 词频列表
+            rebuild: 0 模板提取， 1 fttree重建
+
+        Returns:
+
+        """
+        leaf_num = para['leaf_num']
+        CUTTING_PERCENT = 0
+        # print ('rebuild',rebuild)
+        if rebuild == 0:
+            CUTTING_PERCEN = para['CUTTING_PERCENT']
+
+
+        assert logs != []
+        # assert words_frequency != []
+        for log in logs:
+            pid, words = log
+            words = list(words)#过滤掉重复的单词set
+            #print(words)
+            words_index = {}
+            words_count = {}
+            for word in words:
+            #     if word in words_frequency:
+            #         words_index[word] = float(words_frequency.index(word))
+                #统计重复的单词
+                if word not in words_count:
+                    words_count[word]=0
+                words_count[word]+=1
+            # for k, v in words_index.items():
+            #     print(k, v)
+
+            for word in words_count:
+                if words_count[word]>1:
+                    #print('words_count[word]>1')
+                    cur_word=word
+                    for i in range(words_count[word]-1):
+                        cur_word= cur_word+' '+word
+                    words_index[cur_word] = words_index[word]
+                    # print cur_word
+                    # print word
+                    words_index.pop(word)
+
+            #======================anzhaocipin paixulog
+            # words = [x[0] for x in sorted(words_index.items(), key=lambda x: x[1])]
+            words_len = len(words)
+            words = ' '.join(words).split()
+            # print('----------------1words-----------------')
+            # print(words)
+
+            # print len(words)
+            for index, value in enumerate(words):
+                no_cutting = 0 #0一切正常，按照leafnum剪枝，1不剪枝
+                if rebuild == 1: #表示matchTemplate中调用函数重新建树
+                    no_cutting = 1 #如果重新建树，则所有的节点都不减枝
+                elif index<=float(len(words))*CUTTING_PERCENT:
+                    no_cutting = 1
+                if index == words_len - 1:
+                    # self.tree_list[pid].insert_node(words[:index], value, 0, leaf_num, no_cutting, rebuild)# 暂时去掉模板子集的限制，即不检测最后一个结点了，即只保留长模板
+                    self.tree_list[pid].insert_node(words[:index], value, para, 1, no_cutting, rebuild) #检测最后一个节点！ 保留短模板
+                else:
+                    self.tree_list[pid].insert_node(words[:index], value, para, 0, no_cutting, rebuild)
+
 
     def do(self, logs, para):
         """
@@ -423,6 +501,9 @@ class WordsFrequencyTree(object):
         """
         words_frequency = sorted(words_frequency.items(), key=lambda x: (x[1], x[0]), reverse=True)
         words_frequency = [x[0] for x in words_frequency]
+        # print('words_frequency------------------------------------')
+        # print(words_frequency)
+        # print('---------------------------------------------------')
 
 
         f = open(fre_word_path, 'w')
@@ -444,6 +525,10 @@ class WordsFrequencyTree(object):
 
         for pid in self.tree_list:
             all_paths[pid] = []
+
+
+
+
             path = self.traversal_tree(self.tree_list[pid])
 
             for template in path[1]:
@@ -487,7 +572,6 @@ class WordsFrequencyTree(object):
         draw_list=[]
         unique_dir={} #record the times of words
         for pid in self.tree_list:
-            print ('cur_value')
             head_node = self.tree_list[pid]._head
             myQueue = []
             myQueue.append(head_node)
@@ -525,7 +609,7 @@ class WordsFrequencyTree(object):
 
 def RecursionPreOrder(node):
     if(node is not None):
-        print(node.get_data())
+        # print(node.get_data())
         for child_node in node.get_children():
             RecursionPreOrder(node)
 
@@ -588,6 +672,8 @@ def getLogsAndSave(para):
             if not log:
                 continue
             return_msg=getMsgFromNewSyslog(log)
+            # print('---------return_msg--------------------------------------------------')
+            # print(return_msg)
             if len(return_msg[1]) < short_threshold: #过滤长度小于5的日志
                 short_log+=1
                 continue
