@@ -58,7 +58,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 按照日志原先的单词顺序匹配
 
 * 运行脚本的的命令：
-	* python3 matchTemplate.py -short\_threshold 5 -leaf\_num 6 -template\_path ./out\_logTemplate\_order.txt -log\_path ./training.log -out\_seq\_path ./output2.seq -plot\_flag 1 -CUTTING\_PERCENT 0.3 -NO\_CUTTING 1 **-match\_model 4**
+	* python3 matchTemplate.py -short\_threshold 5 -leaf\_num 6 -template\_path ./output.template\_order -log\_path ./training.log -out\_seq\_path ./output2.seq -plot\_flag 1 -CUTTING\_PERCENT 0.3 -NO\_CUTTING 1 **-match\_model 4**
 	
 ## splitTimeWindows.py:
  模板分析：切分时间窗口，然后统计正常时段、异常时段、全部时段中出现top10的模板，并且画图
