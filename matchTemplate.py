@@ -450,7 +450,7 @@ if __name__ == "__main__":
     parser.add_argument('-fre_word_path', help='fre_word_path', type=str, default="./output.fre")
     parser.add_argument('-log_path', help='log_path', type=str, default='./new.log')
     parser.add_argument('-out_seq_path', help='out_seq_path', type=str, default='./output.seq')
-    parser.add_argument('-plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)
+    parser.add_argument('-plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=1)
     parser.add_argument('-CUTTING_PERCENT', help='增量学习时会用到，正常匹配用不到',type=float, default = 0.3)
     parser.add_argument('-NO_CUTTING', help='增量学习时会用到，正常匹配用不到', type=int, default=1)#初步设定1时，是前60% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
     parser.add_argument('-match_model', help='1:正常匹配  2:单条增量学习&匹配 3:批量增量学习&匹配', type=int, default = 3)
