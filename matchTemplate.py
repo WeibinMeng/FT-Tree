@@ -311,7 +311,7 @@ class Match:
                     # temp_tree=self.tree
                     print(line)
                     cur_log_once_list=[['', log_words]]
-                    self.tree.auto_temp(cur_log_once_list, self.words_frequency)
+                    self.tree.auto_temp(cur_log_once_list, self.words_frequency, para)
                     new_tag = len(self.template_tag_dir)+1
 
                     #添加完新的模板之后，重新匹配日志，把新的模板match到的文本输出出来
@@ -321,7 +321,7 @@ class Match:
                     #第三次匹配模板，输出目前匹配的tag
                     tag, cur_match = self.match(log_words)
 #                    self.drawTree()
-                    # print (tag, cur_match)
+                    print (tag, cur_match)
                     # print ('')
                     #保存新的模板
                     ff = open(template_path,'a')
@@ -407,13 +407,13 @@ class Match:
         print ('new templates:')
         for pid in all_paths:
             for path in all_paths[pid]:
-                # print (i, pid, end=' ')
+                print (i, pid, end=' ')
                 # 首先把pid保存下来
                 cur_match =' '.join(path)
-                # for w in path:
-                    # print (w, end=' ')
-                # print ( '')
-                # i += 1
+                for w in path:
+                    print (w, end=' ')
+                print ( '')
+                i += 1
                 # if True:
                 if cur_match not in self.template_tag_dir:
                     tag = len(self.template_tag_dir)+1
@@ -445,15 +445,15 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-short_threshold', help='short_threshold', type=int, default=5)
-    parser.add_argument('-leaf_num', help='增量学习时的剪枝阈值 ,如果将6改成10，可以看出不同，即LearnTemplateByIntervals会对新来的数据做剪枝', type=int, default=6)
+    parser.add_argument('-leaf_num', help='增量学习时的剪枝阈值 ,如果将6改成10，可以看出不同，即LearnTemplateByIntervals会对新来的数据做剪枝', type=int, default=10)
     parser.add_argument('-template_path', help='plot_flag', type=str, default="./output.template")
     parser.add_argument('-fre_word_path', help='fre_word_path', type=str, default="./output.fre")
-    parser.add_argument('-log_path', help='log_path', type=str, default='./training.log')
+    parser.add_argument('-log_path', help='log_path', type=str, default='./new.log')
     parser.add_argument('-out_seq_path', help='out_seq_path', type=str, default='./output.seq')
     parser.add_argument('-plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)
-    parser.add_argument('-CUTTING_PERCENT', help='增量学习时会用到，正常匹配用不到',type=float, default=0.3)
+    parser.add_argument('-CUTTING_PERCENT', help='增量学习时会用到，正常匹配用不到',type=float, default = 0.3)
     parser.add_argument('-NO_CUTTING', help='增量学习时会用到，正常匹配用不到', type=int, default=1)#初步设定1时，是前60% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
-    parser.add_argument('-match_model', help='1:正常匹配  2:单条增量学习&匹配 3:批量增量学习&匹配', type=int, default=1)
+    parser.add_argument('-match_model', help='1:正常匹配  2:单条增量学习&匹配 3:批量增量学习&匹配', type=int, default = 3)
     args = parser.parse_args()
 
     para = {

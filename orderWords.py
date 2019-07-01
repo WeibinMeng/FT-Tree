@@ -84,6 +84,7 @@ for i in range(len(tag_temp)):
     if tag in tag_log:
         # find the correspondent raw log
         log=getMsgFromNewSyslog(tag_log[tag])[1]
+        print(log)
         # find the correspondent template
         temp=tag_temp[tag].split()
         new_temp=[]
