@@ -694,7 +694,7 @@ if __name__ == "__main__":
     parser.add_argument('-template_path', type=str, default='./output.template')
     parser.add_argument('-fre_word_path', type=str, default='./output.fre')
     parser.add_argument('-picture_path', type=str, default='./tree.png')
-    parser.add_argument('-leaf_num', type=int, default=6)
+    parser.add_argument('-leaf_num', type=int, default=4)
     parser.add_argument('-short_threshold', type=int, default=5)#过滤掉长度小于5的日志
     parser.add_argument('-plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)#如果要画图 则为1
     args = parser.parse_args()
