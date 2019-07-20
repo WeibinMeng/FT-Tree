@@ -87,7 +87,7 @@ if __name__ == "__main__":
     }
 
     para_order = {
-        'rawlog': args.runtime_log_path,
+        'rawlog': args.train_log_path,
         'templates': args.middle_templates,
         'sequences' : args.out_seq_path,
         'order_templates' : args.templates,
