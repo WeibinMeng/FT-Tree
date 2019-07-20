@@ -34,7 +34,7 @@ def orderTemplate(para):
     index=0
     with open(sequences) as IN:
         for line in IN:
-            tag = line.strip().split()[1]
+            tag = line.strip()
             # print(tag)
             if tag not in tag_index:
                 #print(tag)

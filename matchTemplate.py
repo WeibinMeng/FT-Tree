@@ -258,7 +258,9 @@ class Match:
                     tag = -1
 
                 # 匹配到了输出1~n，没匹配到输出0，日志小于过滤长度输出-1
-                f.writelines(timestamp + ' ' + str(tag) + '\n')
+                #输出时间戳
+                # f.writelines(timestamp + ' ' + str(tag) + '\n')
+                f.writelines(str(tag) + '\n')
                 if tag == 0:
                     count_zero += 1
                     # print line
