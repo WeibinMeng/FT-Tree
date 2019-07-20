@@ -10,7 +10,12 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 	python3, pygraphviz
 	
 ## 训练&匹配日志整合：
-* 运行命令：python main_train.py
+* 运行命令：python main\_train.py -train\_log\_path training.log -out\_seq_path output.seq  -templates output.template
+	* 参数解释：
+		* -train\_log\_path： 训练所需要的原始日志
+		* -out\_seq_path：日志匹配完之后的编号序列
+		* -templates：输出的模板文件
+	* **注意：使用该算法时，最好将数据集中前面几列时间、消息类型的信息删掉，要不然比较乱**。
 
 
 ## 每个文件的作用
