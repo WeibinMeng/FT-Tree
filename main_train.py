@@ -39,7 +39,7 @@ if __name__ == "__main__":
     #1.调用ft-tree.py训练模板 ft_tree的参数
     parser = argparse.ArgumentParser()
     parser.add_argument('-FIRST_COL', help='FIRST_COL', type=int, default=0)#表示日志数据从第几列开始，若纯logs，则为0
-    parser.add_argument('-NO_CUTTING', help='NO_CUTTING', type=int, default=0)#初步设定1时，是前30% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
+    parser.add_argument('-NO_CUTTING', help='NO_CUTTING', type=int, default=1)#初步设定1时，是前30% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
     parser.add_argument('-CUTTING_PERCENT', help='CUTTING_PERCENT',type=float, default=0.3)
     parser.add_argument('-train_log_path', type=str, default='./2kBGL.log')
     parser.add_argument('-middle_templates', type=str, default='./output.template_middle')

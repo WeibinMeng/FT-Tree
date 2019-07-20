@@ -270,7 +270,7 @@ class Match:
         print('filting # short logs:', short_log, '| threshold =', short_threshold)
         print('# of unmatched log (except filting):', count_zero)
         print('# of total logs:', total_num)
-        # print('seq_file_path:', out_seq_path)
+        print('seq_file_path:', out_seq_path)
         # print('template_path:', template_path)
 
 
