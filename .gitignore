@@ -4,4 +4,5 @@ __pycache__
 *.dot
 *.fre
 *.in
-*.template
+*.template*
+*.seq
