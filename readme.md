@@ -17,7 +17,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 	   * FIRST\_COL 每行日志从第几列作为输入，默认为0
 	   * NO\_CUTTING = 0 #初步设定1时，是前30% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
 	   * CUTTING\_PERCENT =0.6 #前百分之多少是不剪枝的 
-		* data\_path='input.txt'
+		* train\_log\_path='input.txt'
 	   *   template\_path = "./logTemplate.txt" #模板
 	    *   fre\_word\_path = "./fre_word.txt"   #
 	    *   leaf\_num = 4 #剪枝数
@@ -35,7 +35,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 	*  leaf\_num 增量学习时的剪枝阈值。(如果将6改成10，可以通过样例数据看出不同匹配机制中的不同效果，即LearnTemplateByIntervals会对新来的数据做剪枝)
 	*  template\_path = './output.template'
 	*  fre\_word\_path = './output.fre'
-	*  log\_path = './new.log'
+	*  runtime\_log\_path = './new.log'
 	*  out\_seq\_path = './output.seq'
 	*  plot\_flag 0为不画图，1为画图，默认为0。（如树太大不要画图，会卡死）
 	*  CUTTING\_PERCENT 指定每条日志的前百分之几的单词不剪枝，增量学习时会用到，正常匹配用不到

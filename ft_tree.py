@@ -5,7 +5,7 @@
 # * Author        : Weibin Meng
 # * Email         : mwb16@mails.tsinghua.edu.cn
 # * Create time   : 2016-12-09 12:16
-# * Last modified : 2019-01-14 14:49
+# * Last modified : 2019-07-20 14:49
 # * Filename      : ft_tree.py
 # * Description   :
 '''
@@ -620,14 +620,15 @@ def getMsgFromNewSyslog(log, msg_id_index=3):
     # msg = ' '.join(word_list[FIRST_COL:])
     msg = log
 
-    msg = re.sub('(:(?=\s))|((?<=\s):)', ' ', msg)
-    # msg = re.sub('(\d+\.)+\d+', '', msg)
-    # msg = re.sub('\d{2}:\d{2}:\d{2}', '', msg)
-    # msg = re.sub('Mar|Apr|Dec|Jan|Feb|Nov|Oct|May|Jun|Jul|Aug|Sep', '', msg)
-    # msg = re.sub(':?(\w+:)+', '', msg)
-    msg = re.sub('\.|\(|\)|\<|\>|\/|\-|\=|\[|\]|,|:', ' ', msg)
-    msg = re.sub('\\b(0[xX])?[A-Fa-f0-9]+\\b', ' ', msg)#过滤十六进制的内存地址
-    msg = re.sub('(\s|^)[1-9]\d*(\s|$)', '', msg)#过滤连续的纯数字
+    #正则表达式
+    # msg = re.sub('(:(?=\s))|((?<=\s):)', ' ', msg)
+    # # msg = re.sub('(\d+\.)+\d+', '', msg)
+    # # msg = re.sub('\d{2}:\d{2}:\d{2}', '', msg)
+    # # msg = re.sub('Mar|Apr|Dec|Jan|Feb|Nov|Oct|May|Jun|Jul|Aug|Sep', '', msg)
+    # # msg = re.sub(':?(\w+:)+', '', msg)
+    # msg = re.sub('\.|\(|\)|\<|\>|\/|\-|\=|\[|\]|,|:', ' ', msg)
+    # msg = re.sub('\\b(0[xX])?[A-Fa-f0-9]+\\b', ' ', msg)#过滤十六进制的内存地址
+    msg = re.sub('\s?(\s|^)[1-9]\d*(\s|$)\s?', ' ', msg)#过滤连续的纯数字
 
     msg_list = msg.split()
 
@@ -690,7 +691,7 @@ if __name__ == "__main__":
     parser.add_argument('-FIRST_COL', help='FIRST_COL', type=int, default=0)#表示日志数据从第几列开始，若纯logs，则为0
     parser.add_argument('-NO_CUTTING', help='NO_CUTTING', type=int, default=1)#初步设定1时，是前30% 不剪枝 ,全局开关， 当其为0时，全局按照min_threshold剪枝
     parser.add_argument('-CUTTING_PERCENT', help='CUTTING_PERCENT',type=float, default=0.3)
-    parser.add_argument('-data_path', type=str, default='./training.log')
+    parser.add_argument('-train_log_path', type=str, default='./training.log')
     parser.add_argument('-template_path', type=str, default='./output.template')
     parser.add_argument('-fre_word_path', type=str, default='./output.fre')
     parser.add_argument('-picture_path', type=str, default='./tree.png')
@@ -703,7 +704,7 @@ if __name__ == "__main__":
         'FIRST_COL' : args.FIRST_COL,
         'NO_CUTTING' : args.NO_CUTTING,
         'CUTTING_PERCENT' : args.CUTTING_PERCENT,
-        'data_path' : args.data_path,
+        'data_path' : args.train_log_path,
         'template_path' : args.template_path,
         'fre_word_path' : args.fre_word_path,
         'leaf_num' : args.leaf_num,
