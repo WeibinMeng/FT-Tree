@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    para_train = {
+    para_train = { 
         'FIRST_COL' : args.FIRST_COL,
         'NO_CUTTING' : args.NO_CUTTING,
         'CUTTING_PERCENT' : args.CUTTING_PERCENT,
