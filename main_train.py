@@ -48,7 +48,7 @@ if __name__ == "__main__":
     parser.add_argument('-leaf_num', type=int, default=5)
     parser.add_argument('-short_threshold', type=int, default=5)#过滤掉长度小于5的日志
     parser.add_argument('-plot_flag', help='画图, 如树太大不要画图，会卡死', type=int, default=0)#如果要画图 则为1
-    
+     
     #2.
     # parser.add_argument('-runtime_log_path', help='log_path', type=str, default='./training.log') #'./new.log'
     parser.add_argument('-out_seq_path', help='out_seq_path', type=str, default='./output.seq')
