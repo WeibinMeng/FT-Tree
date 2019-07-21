@@ -64,7 +64,7 @@ if __name__ == "__main__":
         'FIRST_COL' : args.FIRST_COL,
         'NO_CUTTING' : args.NO_CUTTING,
         'CUTTING_PERCENT' : args.CUTTING_PERCENT,
-        'data_path' : args.train_log_path,
+        'data_path' : args.train_log_path, 
         'template_path' : args.middle_templates,
         'fre_word_path' : args.fre_word_path,
         'leaf_num' : args.leaf_num,
