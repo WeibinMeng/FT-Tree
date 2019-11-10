@@ -24,7 +24,7 @@ def orderTemplate(para):
     sequences = para['sequences']
     order_templates = para['order_templates']
     variable_symbol = para['variable_symbol']
-
+    # remove_middle = para['remove_middle']
 
     tag_index={}
     index_tag={}
@@ -71,10 +71,14 @@ def orderTemplate(para):
                 if k in temp:
                     new_temp.append(k)
                     temp.remove(k)
+                else:
+                    new_temp.append(variable_symbol)
             # modify the template
-            out=' '.join(new_temp)
+            out = ' '.join(new_temp)
         f.writelines(out+'\n')
     print('template_path', order_templates)
+    # if remove_middle:
+    #     os.remove(templates)
 
 if __name__ == '__main__':
 
@@ -84,7 +88,8 @@ if __name__ == '__main__':
     parser.add_argument('-sequences', help='sequences', type=str, default="./output.seq")
     parser.add_argument('-rawlog', help='rawlog', type=str, default="./training.log")
     parser.add_argument('-final_templates', help='rawlog', type=str, default="./output.template")
-    parser.add_argument('-variable_symbol', help='输出模板时，用*表示模板中的变量空位', type=str, default=" ")
+    parser.add_argument('-variable_symbol', help='symbol for variable in templates', type=str, default=" ")
+    parser.add_argument('-remove_middle', help='if 1, delete middle results after training', type=int, default=0)
     args = parser.parse_args()
 
     para = {
@@ -92,7 +97,8 @@ if __name__ == '__main__':
     'templates': args.middle_templates,
     'sequences' : args.sequences,
     'order_templates' : args.final_templates,
-    'variable_symbol' : args.variable_symbol
+    'variable_symbol' : args.variable_symbol,
+    'remove_middle': args.remove_middle
     }
     
     orderTemplate(para)

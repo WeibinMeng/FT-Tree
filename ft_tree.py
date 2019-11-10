@@ -546,15 +546,15 @@ class WordsFrequencyTree(object):
             for path in all_paths[pid]:
                 # count+=1
                 #print (i, pid)
-                print (i, pid, end=' ')
+                # print (i, pid, end=' ')
                 # 首先把pid保存下来
                 f.write(pid + " ") #不保存index
                 #f.write(str(i)+' '+pid + " ")#保存index，从1开始
                 for w in path:
                     #print (w)
-                    print (w, end=' ')
+                    # print (w, end=' ')
                     f.write(w + " ")
-                print ( '')
+                # print ( '')
                 f.write("\n")
                 i += 1
         f.close()
@@ -620,7 +620,7 @@ def getMsgFromNewSyslog(log, msg_id_index=3):
     # msg = ' '.join(word_list[FIRST_COL:])
     msg = log
 
-    #正则表达式
+    ##Regular expression
     # msg = re.sub('(:(?=\s))|((?<=\s):)', ' ', msg)
     # # msg = re.sub('(\d+\.)+\d+', '', msg)
     # # msg = re.sub('\d{2}:\d{2}:\d{2}', '', msg)
@@ -628,7 +628,7 @@ def getMsgFromNewSyslog(log, msg_id_index=3):
     # # msg = re.sub(':?(\w+:)+', '', msg)
     # msg = re.sub('\.|\(|\)|\<|\>|\/|\-|\=|\[|\]|,|:', ' ', msg)
     # msg = re.sub('\\b(0[xX])?[A-Fa-f0-9]+\\b', ' ', msg)#过滤十六进制的内存地址
-    msg = re.sub('\s?(\s|^)[1-9]\d*(\s|$)\s?', ' ', msg)#过滤连续的纯数字
+    # msg = re.sub('\s?(\s|^)[1-9]\d*(\s|$)\s?', ' ', msg)#过滤连续的纯数字
 
     msg_list = msg.split()
 
