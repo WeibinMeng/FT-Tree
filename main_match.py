@@ -111,12 +111,20 @@ if __name__ == "__main__":
 
     templates = readLines(args.templates)
     logs = readLines(args.logs)
+
+
+
     matcher = MatchTree()
     print("\n---------adding templates--------")
     for t in templates:
-        print(matcher.add_template(t.split(" ")))
+        # print(matcher.add_template(t.split(" ")))
+        matcher.add_template(t.split(" "))
+
     print("\n---------match logs-------------")
-    for l in logs:
-        print(matcher.match_template(l.split(" ")))
+    for i, l in enumerate(logs):
+        out = matcher.match_template(l.split(" "))
+        print(i, out)
+
     print("\n----------template map-----------")
-    print(matcher.template_map)
+    out = matcher.template_map
+    # print(out)
