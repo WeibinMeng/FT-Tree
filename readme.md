@@ -24,4 +24,4 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 	
 
 
-This code was completed by [@Weibin Meng](https://github.com/WeibinMeng),
+This code was completed by [@Weibin Meng](https://github.com/WeibinMeng).
