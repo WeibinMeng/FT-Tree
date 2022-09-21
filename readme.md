@@ -8,7 +8,8 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 ## Environment： 
 	python3, pygraphviz (if draw tree)
 
-## Train：
+## Quick Start:
+###Train：
 * python main\_train.py -train\_log\_path training.log -out\_seq_path output.seq  -templates output.template
 	* Parameters：
 		* -train\_log\_path： rawlog path
@@ -16,7 +17,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 		* -templates：template file
 
 
-## Match：
+### Match：
 * python main_match.py -templates ./output.template -logs training.log
 	* Parameters：
 		* -templates： template path
