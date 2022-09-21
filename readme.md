@@ -9,7 +9,7 @@ Our paper is published on IEEE/ACM International Symposium on Quality of Service
 	python3, pygraphviz (if draw tree)
 
 ## Quick Start:
-###Train：
+### Train：
 * python main\_train.py -train\_log\_path training.log -out\_seq_path output.seq  -templates output.template
 	* Parameters：
 		* -train\_log\_path： rawlog path
