@@ -512,7 +512,7 @@ class WordsFrequencyTree(object):
 
         if plot_flag == 1:
             #画树，dratTreee，画图，放到输出模板之前，是因为traversal_tree函数会修改is_end变量的值，存在bug！！
-            self.drawTree()#画树，dratTreee，画图
+            self.drawTree(para)#画树，dratTreee，画图
 
 
 
@@ -561,7 +561,7 @@ class WordsFrequencyTree(object):
         # print "\ntemplate_count:",count
         return all_paths
 
-    def drawTree(self):
+    def drawTree(self, para):
         #draw trees
         import pygraphviz as pgv
         A=pgv.AGraph(directed=True,strict=True)
@@ -600,7 +600,7 @@ class WordsFrequencyTree(object):
                         A.add_edge(cur_father,cur_child)
             A.write('fooOld.dot')
             A.layout('dot') # layout with dot
-            A.draw('Trace.png') # write to file
+            A.draw(para['picture_path']) # write to file
 
 
 def RecursionPreOrder(node):
